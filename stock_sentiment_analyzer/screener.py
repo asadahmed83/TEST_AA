@@ -20,9 +20,10 @@ class ScreenResult:
 
 
 class Screener:
-    def __init__(self) -> None:
+    def __init__(self, demo_mode: bool = False) -> None:
         self._analyzer = SentimentAnalyzer()
         self._cache: dict[str, tuple[float, list[ScreenResult]]] = {}
+        self._demo_mode = demo_mode
 
     def _evaluate_ticker(self, ticker: str) -> ScreenResult:
         try:
@@ -53,6 +54,11 @@ class Screener:
             )
 
     def scan(self, tickers: list[str] | None = None, use_cache: bool = True) -> list[ScreenResult]:
+        if self._demo_mode:
+            from demo_data import build_demo_results
+
+            return build_demo_results()
+
         tickers = tickers or config.DEFAULT_WATCHLIST
         cache_key = ",".join(sorted(tickers))
 

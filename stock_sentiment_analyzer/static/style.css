@@ -23,6 +23,21 @@ header h1 {
   margin: 0.25rem 0;
 }
 
+.demo-banner {
+  display: inline-block;
+  background: #fff8c5;
+  color: #7d5a00;
+  border: 1px solid #d4a72c;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .demo-banner { background: #3b2f00; color: #f2cc60; border-color: #7d5a00; }
+}
+
 #refresh-btn {
   margin-top: 0.75rem;
   padding: 0.5rem 1rem;

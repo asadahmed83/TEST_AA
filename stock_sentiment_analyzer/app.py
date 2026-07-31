@@ -1,12 +1,16 @@
 """Flask dashboard for the stock sentiment screener."""
 
+import os
+
 from flask import Flask, jsonify, render_template, request
 
 import config
 from screener import Screener
 
+DEMO_MODE = os.environ.get("DEMO_MODE") == "1"
+
 app = Flask(__name__)
-screener = Screener()
+screener = Screener(demo_mode=DEMO_MODE)
 
 
 @app.route("/")
@@ -16,7 +20,8 @@ def index():
         "index.html",
         results=results,
         config=config,
-        watchlist=", ".join(config.DEFAULT_WATCHLIST),
+        demo_mode=DEMO_MODE,
+        watchlist=", ".join(r.ticker for r in results) if DEMO_MODE else ", ".join(config.DEFAULT_WATCHLIST),
     )
 
 
