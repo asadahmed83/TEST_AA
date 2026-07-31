@@ -1,0 +1,5 @@
+yfinance>=0.2.40
+feedparser>=6.0.10
+vaderSentiment>=3.3.2
+flask>=3.0.0
+pandas>=2.0.0

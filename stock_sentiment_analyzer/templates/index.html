@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Stock Sentiment Screener</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Stock Sentiment Screener</h1>
+    <p class="subtitle">
+      Flags stocks moving up (&ge; {{ config.PRICE_MOVE_THRESHOLD }}%) alongside positive news sentiment
+      (&ge; {{ config.SENTIMENT_THRESHOLD }} avg. VADER score, {{ config.MIN_HEADLINES }}+ headlines).
+    </p>
+    <p class="watchlist">Watchlist: {{ watchlist }}</p>
+    <button id="refresh-btn">Refresh scan</button>
+    <span id="status"></span>
+  </header>
+
+  <main>
+    <table id="results-table">
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>Price</th>
+          <th>% Change</th>
+          <th>Vol / Avg</th>
+          <th>Sentiment</th>
+          <th>Headlines</th>
+          <th>Mover?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in results %}
+        <tr class="{{ 'mover' if r.is_sentiment_driven_mover else '' }}">
+          <td class="ticker">{{ r.ticker }}</td>
+          {% if r.error %}
+          <td colspan="6" class="error">Error: {{ r.error }}</td>
+          {% else %}
+          <td>{{ "%.2f"|format(r.price.last_price) if r.price else "-" }}</td>
+          <td class="{{ 'positive' if r.price and r.price.percent_change > 0 else 'negative' }}">
+            {{ "%.2f"|format(r.price.percent_change) if r.price else "-" }}%
+          </td>
+          <td>{{ "%.2f"|format(r.price.volume_ratio) if r.price else "-" }}x</td>
+          <td class="{{ 'positive' if r.sentiment and r.sentiment.average_score > 0 else 'negative' }}">
+            {{ "%.2f"|format(r.sentiment.average_score) if r.sentiment else "-" }}
+          </td>
+          <td>{{ r.sentiment.headline_count if r.sentiment else 0 }}
+            ({{ r.sentiment.positive_count if r.sentiment else 0 }}+ /
+             {{ r.sentiment.negative_count if r.sentiment else 0 }}-)
+          </td>
+          <td>{{ "🚀" if r.is_sentiment_driven_mover else "" }}</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    document.getElementById('refresh-btn').addEventListener('click', async () => {
+      const status = document.getElementById('status');
+      status.textContent = ' Refreshing...';
+      const resp = await fetch('/api/scan?refresh=1');
+      if (resp.ok) {
+        status.textContent = '';
+        window.location.reload();
+      } else {
+        status.textContent = ' Refresh failed.';
+      }
+    });
+  </script>
+</body>
+</html>
