@@ -30,6 +30,14 @@ npm run dev               # http://localhost:5173
 
 Without any keys the app is fully usable: Google Drive and OneDrive run in **demo mode** (a local stand-in cloud, labelled "demo") and the AI uses the on-device engine.
 
+### On your phone (same Wi-Fi)
+
+```bash
+npm run dev:phone         # HTTPS on your LAN, prints a "Network: https://192.168.x.x:5173" URL
+```
+
+Open that **https://** URL on the phone and accept the self-signed certificate warning (Advanced → Proceed). HTTPS is required: phones block the camera and Web Crypto on plain `http://<ip>`. If the phone can't connect, allow port 5173 through your computer's firewall. Tip: browser menu → *Add to Home screen* for an app-like icon.
+
 ### Claude (optional)
 
 ```bash
@@ -93,6 +101,7 @@ android/           Capacitor Android project
 | Command | |
 | --- | --- |
 | `npm run dev` / `npm run build` | Web dev server / production build (both copy OCR assets first) |
+| `npm run dev:phone` | Dev server over HTTPS on your LAN for testing on a phone |
 | `npm test` | Unit tests (naming, on-device AI, crypto, markdown escaping) |
 | `npm run typecheck` | TypeScript for app, server and config |
 | `npm run server` | Claude proxy (Node 22.18+) |
