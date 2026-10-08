@@ -1,0 +1,46 @@
+{
+  "name": "scanvault",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/copy-ocr-assets.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/copy-ocr-assets.mjs",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc -b --noEmit",
+    "server": "node server/index.mjs",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:open": "npx cap open android"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.132.1",
+    "@azure/msal-browser": "^5.25.0",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/browser": "^8.0.5",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/filesystem": "^8.1.4",
+    "@capacitor/share": "^8.0.3",
+    "express": "^5.2.1",
+    "jspdf": "^4.2.1",
+    "pdfjs-dist": "^6.4.299",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tesseract.js": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^8.5.3",
+    "@tesseract.js-data/eng": "^1.0.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  }
+}
